@@ -1,0 +1,63 @@
+# Makefile for SoulCatcher
+# DSH
+
+PREFIX=@prefix@
+CONFIGDIR=$(PREFIX)/etc/
+BINDIR=$(PREFIX)/bin/
+SBINDIR=$(PREFIX)/sbin/
+LOGDIR=$(PREFIX)/log/
+DBDIR=$(PREFIX)/db/
+
+all: Soulcatcher
+
+CC = g++
+
+INCLUDE = .
+
+CPPFLAGS = @CPPFLAGS@ -DSOUL_CONF=\"$(CONFIGDIR)soul.conf\" -Wno-deprecated -frepo
+
+LIBS = @LIBS@
+
+INSTALL = @INSTALL@
+
+Soulcatcher: fileio.o main.o base.o sub_acl.o soul.o checks.o stats.o souldb.o 
+	$(CC) -o soul $(LIBS) -I$(INCLUDE) fileio.o base.o main.o sub_acl.o soul.o checks.o stats.o souldb.o
+
+base: base.cpp base.h
+	$(CC) -I$(INCLUDE) $(CFLAGS) -c base.cpp
+
+soul: soul.cpp soul.h
+	$(CC) -I$(INCLUDE( $(CFLAGS) -c soul.cpp
+
+fileio: fileio.cpp fileio.h
+	$(CC) -I$(INCLUDE) $(CFLAGS) -c fileio.cpp
+
+main: main.cpp
+	$(CC) -I$(INCLUDE) $(CFLAGS) -c main.cpp
+
+sub_acl: sub_acl.cpp
+	$(CC) -I$(INCLUDE) $(CFLAGS) -c sub_acl.cpp
+
+checks: checks.cpp
+	$(CC) -I$(INCLUDE) $(CFLAGS) -c checks.cpp
+
+stats: stats.cpp
+	$(CC) -I$(INCLUDE) $(CFLAGS) -c stats.cpp
+
+souldb: souldb.cpp
+	$(CC) -I$(INCLUDE) $(CFLAGS) -c souldb.cpp
+
+clean:
+	rm *.o *.rpo soul -f
+
+install: Soulcatcher
+
+	mkdir -p $(PREFIX); mkdir -p $(BINDIR)
+	mkdir -p $(SBINDIR); mkdir -p $(CONFIGDIR)
+	mkdir -p $(LOGDIR); mkdir -p $(DBDIR)
+
+	$(INSTALL) soul $(SBINDIR)
+	$(INSTALL) ../contrib/soul.conf $(CONFIGDIR)
+
+
+
