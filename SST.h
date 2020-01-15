@@ -96,7 +96,7 @@ bool add_to_hash(T add_object, char *key) {
 	unsigned char index=0; 
 	if(objects_to_hash == NULL) return 1;
 
-	get_key(index,key);
+	-killall (index,key);
 
 	if((add_to_hash_line(index,key,add_object)) == QUITERROR) return 1;
 
